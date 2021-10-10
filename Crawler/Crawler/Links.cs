@@ -70,14 +70,8 @@ namespace Crawler
             foreach (var link in links)
             {
                 Console.WriteLine(link);
-                try
-                {
-                    Console.WriteLine(GetResponseTime(link).Milliseconds + "ms");
-                }
-                catch
-                {
-                    Console.WriteLine("Response time is no available");
-                }
+                Console.WriteLine(GetResponseTime(link).Milliseconds + "ms");
+
             }
             Console.WriteLine(Environment.NewLine);
         }
