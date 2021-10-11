@@ -23,7 +23,6 @@ namespace Crawler
                 {
                     result = Uri.TryCreate(url, UriKind.Absolute, out uriResult);
                 }
-
             }
             while (!result);
 

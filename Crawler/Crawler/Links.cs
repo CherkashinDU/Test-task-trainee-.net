@@ -11,6 +11,7 @@ namespace Crawler
 {
     public class Links
     {
+
         public List<string> GetLinksWebsite(List<string> links, string baseUrl)
         {
             var result = new List<string>();
@@ -25,9 +26,7 @@ namespace Crawler
                         result.Add(item);
                     }
                 }
-
             }
-
             return result;
         }
 
@@ -87,17 +86,21 @@ namespace Crawler
 
         public void ShowLinksWithTime(List<string> links)
         {
+            var linksWithTime = new List<Page>();
             foreach (var link in links)
             {
-                Console.WriteLine(link);
-                try
+                var page = new Page
                 {
-                    Console.WriteLine(GetResponseTime(link).Milliseconds + "ms");
-                }
-                catch
-                {
-                    Console.WriteLine("Response time is no available");
-                }
+                    Link = link,
+                    ResponseTime = GetResponseTime(link).Milliseconds
+                };
+
+                linksWithTime.Add(page);
+            }
+
+            foreach (var item in linksWithTime.OrderBy(r => r.ResponseTime))
+            {
+                Console.WriteLine($"{item.Link} {item.ResponseTime}ms");
             }
             Console.WriteLine(Environment.NewLine);
         }
