@@ -11,6 +11,26 @@ namespace Crawler
 {
     public class Links
     {
+        public List<string> GetLinksWebsite(List<string> links, string baseUrl)
+        {
+            var result = new List<string>();
+            result.AddRange(links);
+            foreach (var link in links)
+            {
+                var document = new HtmlWeb().Load(link);
+                foreach (var item in GetLinksHtml(document, baseUrl))
+                {
+                    if (!result.Contains(item))
+                    {
+                        result.Add(item);
+                    }
+                }
+
+            }
+
+            return result;
+        }
+
         public List<string> GetLinksHtml(HtmlDocument document, string baseUrl)
         {
             var links = new List<string>();
@@ -42,7 +62,7 @@ namespace Crawler
             {
                 if (node["loc"] != null)
                 {
-                    links.Add(node["loc"].InnerText);
+                    links.Add(node["loc"].InnerText.Replace("//www.", "//"));
                 }
             }
             return links;
@@ -70,8 +90,14 @@ namespace Crawler
             foreach (var link in links)
             {
                 Console.WriteLine(link);
-                Console.WriteLine(GetResponseTime(link).Milliseconds + "ms");
-
+                try
+                {
+                    Console.WriteLine(GetResponseTime(link).Milliseconds + "ms");
+                }
+                catch
+                {
+                    Console.WriteLine("Response time is no available");
+                }
             }
             Console.WriteLine(Environment.NewLine);
         }

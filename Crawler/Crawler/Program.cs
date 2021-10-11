@@ -29,9 +29,11 @@ namespace Crawler
 
             var link = new Links();
             var document = new HtmlWeb().Load(uriResult);
-            var linksHtml = link.GetLinksHtml(document, url);
-            var linksSitemap = link.GetLinksSitemap(url);
 
+            var linksHtml = link.GetLinksWebsite(link.GetLinksHtml(document, url), url);
+            linksHtml.Sort();
+            var linksSitemap = link.GetLinksSitemap(url);
+            linksSitemap.Sort();
             Console.WriteLine("Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site.");
             link.ShowLinks(linksSitemap.Except(linksHtml).ToList());
 
