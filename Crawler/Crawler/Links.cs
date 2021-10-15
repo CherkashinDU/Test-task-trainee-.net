@@ -40,7 +40,7 @@ namespace Crawler
                 if (!link.Contains("mailto") && !link.Contains("skype"))
                 {
                     var absoluteUrl = GetAbsoluteUrlString(baseUrl, link);
-                    if (absoluteUrl.StartsWith(baseUrl))
+                    if (absoluteUrl.StartsWith(baseUrl) && !absoluteUrl.Contains("#"))
                         links.Add(absoluteUrl);
                 }
             }
