@@ -34,12 +34,14 @@ namespace Crawler
             var linksSitemap = link.GetLinksSitemap(url);
             linksSitemap.Sort();
             Console.WriteLine("Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site.");
-            link.ShowLinks(linksSitemap.Except(linksHtml).ToList());
+            var uniqueSitemapUrls = linksSitemap.Except(linksHtml).ToList();
+            link.ShowLinks(uniqueSitemapUrls);
 
             Console.WriteLine("Urls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml");
-            link.ShowLinks(linksHtml.Except(linksSitemap).ToList());
+            var uniqueHtmlUrls = linksHtml.Except(linksSitemap).ToList();
+            link.ShowLinks(uniqueHtmlUrls);
 
-            link.ShowLinksWithTime(linksSitemap.Except(linksHtml).Concat(linksHtml.Except(linksSitemap)).ToList());
+            link.ShowLinksWithTime(uniqueHtmlUrls.Concat(uniqueSitemapUrls).ToList());
             Console.WriteLine("Urls found after crawling a website: " + linksHtml.Count);
             Console.WriteLine("Urls found in sitemap: " + linksSitemap.Count);
         }

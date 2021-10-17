@@ -27,6 +27,7 @@ namespace Crawler
                     }
                 }
             }
+
             return result;
         }
 
@@ -40,7 +41,7 @@ namespace Crawler
                 if (!link.Contains("mailto") && !link.Contains("skype"))
                 {
                     var absoluteUrl = GetAbsoluteUrlString(baseUrl, link);
-                    if (absoluteUrl.StartsWith(baseUrl) && !absoluteUrl.Contains("#"))
+                    if (absoluteUrl.StartsWith(baseUrl))
                         links.Add(absoluteUrl);
                 }
             }
@@ -72,7 +73,7 @@ namespace Crawler
             var uri = new Uri(url, UriKind.RelativeOrAbsolute);
             if (!uri.IsAbsoluteUri)
                 uri = new Uri(new Uri(baseUrl), uri);
-            return uri.ToString();
+            return uri.GetLeftPart(UriPartial.Query);
         }
 
         public void ShowLinks(List<string> links)
