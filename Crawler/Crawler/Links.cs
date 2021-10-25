@@ -27,6 +27,7 @@ namespace Crawler
                     }
                 }
             }
+            result.Sort();
 
             return result;
         }
@@ -34,7 +35,7 @@ namespace Crawler
         public List<string> GetLinksHtml(HtmlDocument document, string baseUrl)
         {
             var links = new List<string>();
-
+            document.OptionEmptyCollection = true;
             foreach (HtmlNode node in document.DocumentNode.SelectNodes("//a[@href]"))
             {
                 var link = node.Attributes["href"].Value;
@@ -51,10 +52,11 @@ namespace Crawler
         public List<string> GetLinksSitemap(string url)
         {
             var links = new List<string>();
-            var sitemapUrl = url + "/sitemap.xml";
-            var wc = new WebClient();
-            wc.Encoding = Encoding.UTF8;
-            var sitemapString = wc.DownloadString(sitemapUrl);
+            var sitemapString = GetSitemapContent(url);
+            if (string.IsNullOrEmpty(sitemapString))
+            {
+                return links;
+            }
             var document = new XmlDocument();
             document.LoadXml(sitemapString);
 
@@ -65,7 +67,27 @@ namespace Crawler
                     links.Add(node["loc"].InnerText.Replace("//www.", "//"));
                 }
             }
+            links.Sort();
+
             return links;
+        }
+
+        public string GetSitemapContent(string url)
+        {
+            const string sitemapString = null;
+            var sitemapUrl = url + "/sitemap.xml";
+            var wc = new WebClient();
+            wc.Encoding = Encoding.UTF8;
+            wc.Headers["User-Agent"] = "Mozilla/5.0";
+
+            try
+            {
+                return wc.DownloadString(sitemapUrl);
+            }
+            catch
+            {
+                return sitemapString;
+            }
         }
 
         public string GetAbsoluteUrlString(string baseUrl, string url)
@@ -99,6 +121,7 @@ namespace Crawler
                 linksWithTime.Add(page);
             }
 
+            Console.WriteLine("Timing");
             foreach (var item in linksWithTime.OrderBy(r => r.ResponseTime))
             {
                 Console.WriteLine($"{item.Link} {item.ResponseTime}ms");
@@ -109,6 +132,8 @@ namespace Crawler
         static TimeSpan GetResponseTime(string url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.AllowAutoRedirect = true;
+            request.Headers.Add("User-Agent", "Mozilla / 5.0");
             var timer = new Stopwatch();
             timer.Start();
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
