@@ -24,7 +24,7 @@ namespace Crawler.Helpers
             Console.WriteLine("Timing");
             foreach (var item in linksWithTime.OrderBy(r => r.ResponseTime))
             {
-                Console.WriteLine($"{item.Link} {item.ResponseTime}ms");
+                Console.WriteLine($"{item.Link.Replace("//www.", "//")} {item.ResponseTime}ms");
             }
             Console.WriteLine(Environment.NewLine);
         }

@@ -43,7 +43,7 @@ namespace Crawler
                 var uniqueHtmlUrls = htmlUrls.Except(sitemapUrls, new UrlComparer()).ToList();
                 display.ShowUrls(uniqueHtmlUrls);
 
-                var allLinks = htmlUrls.Concat(sitemapUrls).ToList();
+                var allLinks = htmlUrls.Concat(sitemapUrls).Distinct(new UrlComparer()).ToList();
                 await display.ShowUrlsWithTime(allLinks);
             }
             else

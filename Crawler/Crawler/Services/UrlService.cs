@@ -75,7 +75,7 @@ namespace Crawler
                 foreach (HtmlNode node in document.DocumentNode.SelectNodes("//a[@href]"))
                 {
                     var link = node.Attributes["href"].Value;
-                    if (!link.Contains("mailto") && !link.Contains("skype") && !link.Contains(".pdf") && link != "/")
+                    if (!link.Contains("mailto") && !link.Contains("skype") && !link.Contains(".pdf") && link != "/" && !link.Contains("ssh:"))
                     {
                         var absoluteUrl = GetAbsoluteUrlString(domain, link);
                         if (absoluteUrl.StartsWith(domain.OriginalString) && !links.Contains(absoluteUrl, new UrlComparer()))
