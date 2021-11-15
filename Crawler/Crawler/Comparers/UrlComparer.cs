@@ -8,12 +8,12 @@ namespace Crawler
     {
         public bool Equals(string url1, string url2)
         {
-            return new Uri(url1).AbsolutePath == new Uri(url2).AbsolutePath;
+            return new Uri(url1).AbsolutePath.TrimEnd('/') == new Uri(url2).AbsolutePath.TrimEnd('/');
         }
 
         public int GetHashCode([DisallowNull] string obj)
         {
-            return new Uri(obj).LocalPath.GetHashCode();
+            return new Uri(obj).AbsolutePath.TrimEnd('/').GetHashCode();
         }
     }
 }
